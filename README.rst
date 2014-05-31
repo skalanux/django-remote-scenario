@@ -25,9 +25,12 @@ Install django-remote-scenario::
 
     pip install django-remote-scenario
 
-Then use it in a project::
+Then add it to an exsiting django project::
 
-    import django-remote-scenario
+    INSTALLED_APPS = [
+    ...
+    django_rs
+
 
 Features
 --------
