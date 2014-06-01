@@ -16,7 +16,7 @@ Remote scenario setup for e2e testing of django projects
 Documentation
 -------------
 
-The full documentation is at https://django-remote-scenario.readthedocs.org.
+The full documentation will be at https://django-remote-scenario.readthedocs.org.
 
 Quickstart
 ----------
@@ -30,6 +30,65 @@ Then add it to an exsiting django project::
     INSTALLED_APPS = [
     ...
     django_rs
+
+You need add django_rs urls to your project url file like this::
+
+    urlpatterns = patterns('',
+    ...
+    url(r'^drs/', include('django_rs.urls')),
+    ..
+    )
+
+To create custom scenarios, just create a directory inside your app named "scenarios"
+, then add as many files as scenarios you want to implement and create a __init__.py
+file to import them. Inside each of those files, you need to implement a main() function
+setting up the models you want to create for the scenario, you could create them by hand
+or use something like django_dynamic_fixtures https://github.com/paulocheque/django-dynamic-fixture
+
+Note: Your scenario is not limited to creating new models, you may also mock specific parts of the enviroment as well
+
+
+Once everything is ready, start the server this way, this will enable the dynamic call of scenarios::
+
+    python manage.py rune2eserver initial_data.json
+
+
+Note: You need to pass a initial fixture file with the barebones of your data.
+
+it is also possible to pass a specific settings file, for testing purposes,
+in case you want to do the tests using a different database for example::
+
+    python manage.py rune2eserver initial_data.json --settings=demoproject.test_settings
+
+
+To start using it, just go to the following url::
+
+    http://127.0.0.1:8000/drs/[APPLICATION]/[SCENARIO]
+
+after doing that the database will be populated with the data you provided in your
+scenario. Take into account that, everytime you call an scenario, all the other data
+in the database is erased, except for the one in your initial_data fixture files, wich
+are loaded again, and also the one you pass as a parameter when you call the command.
+
+
+Inside this repository you will find a demo Django project preconfigured with a simple
+scenario that sets up four objects. Use it like this:
+
+First run the server::
+
+    $ python manage.py rune2eserver initial_data.json --settings=demoproject.test_settings
+
+Then go to your browser and setup a scenario::
+
+    http://127.0.0.1:8000/drs/demoapp/scenario_1
+
+Later you could see the results on the following url::
+
+    http://127.0.0.1:8000/demoapp/
+
+
+
+
 
 
 Features
