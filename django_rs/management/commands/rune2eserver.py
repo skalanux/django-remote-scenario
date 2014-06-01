@@ -28,5 +28,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         settings.E2E_MODE = True
+        settings.INITIAL_E2E_DATA = args[0]
         call_command('testserver', args[0], interactive=False)
 
