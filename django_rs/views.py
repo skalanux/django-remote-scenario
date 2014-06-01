@@ -24,22 +24,29 @@ from django.conf import settings
 from django.core.management import call_command
 from django.http import HttpResponse
 
+try:
+    E2E_MODE = settings.E2E_MODE
+except:
+    E2E_MODE = False
+
+
 def index(request, app, scenario):
-    app = app if app in settings.INSTALLED_APPS else None
-    if app is None:
-        raise ValueError
+    if E2E_MODE:
+        app = app if app in settings.INSTALLED_APPS else None
+        if app is None:
+            raise ValueError
 
-    import pdb;pdb.set_trace()
-    #module = __import__(scenario, globals=globals(), fromlist=[app, 'scenarios'])
-    imported_scenario = importlib.import_module(app+".scenarios."+scenario)
+        imported_scenario = importlib.import_module(app+".scenarios."+scenario)
 
-    # Initializes database
-    call_command('flush', interactive = False)
-    # Loads all initial data fixtures
-    call_command('syncdb', interactive = False)
+        # Initializes database
+        call_command('flush', interactive = False)
+        # Loads all initial data fixtures
+        call_command('syncdb', interactive = False)
 
-    imported_scenario.main(request)
-    # Error
-    # return HttpResponse(status=500)
-    # OK
-    return HttpResponse(status=204)
+        imported_scenario.main(request)
+        # Error
+        # return HttpResponse(status=500)
+        # OK
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=403)
