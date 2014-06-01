@@ -9,4 +9,6 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
+    # Add the following line to use django_remote_scenarios
+    url(r'^drs/', include('django_rs.urls')),
 )
