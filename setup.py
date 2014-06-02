@@ -37,14 +37,14 @@ setup(
     include_package_data=True,
     install_requires=[
     ],
-    license="BSD",
+    license="GPLv3+",
     zip_safe=False,
     keywords='django-remote-scenario',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Framework :: Django',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: BSD License',
+        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
         'Natural Language :: English',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.6',
