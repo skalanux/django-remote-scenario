@@ -25,5 +25,5 @@ from django_rs import views
 
 
 urlpatterns = [
-    url(r'^(?P<app>\w+)/(?P<scenario>\w+)/', views.index, name='index')
+    url(r'^(?P<app>[-\w.]+)/(?P<scenario>\w+)/', views.index, name='index')
 ]
