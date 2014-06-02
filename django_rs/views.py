@@ -38,11 +38,16 @@ def index(request, app, scenario):
 
         imported_scenario = importlib.import_module(app+".scenarios."+scenario)
 
-        # Initializes database
-        call_command('flush', interactive = False)
-        # Loads all initial data fixtures
-        call_command('syncdb', interactive = False)
-        call_command('loaddata', settings.INITIAL_E2E_DATA, interactive = False)
+        flush = request.GET.get('flush', "1")
+
+        flush = True if flush=="1" else False
+
+        if flush:
+            # Initializes database
+            call_command('flush', interactive = False)
+            # Loads all initial data fixtures
+            call_command('syncdb', interactive = False)
+            call_command('loaddata', settings.INITIAL_E2E_DATA, interactive = False)
 
         imported_scenario.main(request)
         # Error
