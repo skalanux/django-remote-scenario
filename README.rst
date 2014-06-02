@@ -82,6 +82,10 @@ Then go to your browser and setup a scenario::
 
     http://127.0.0.1:8000/drs/demoapp/scenario_1
 
+You may also pass a parameter to avoid flushing the database on a specific call::
+
+    http://127.0.0.1:8000/drs/demoapp/scenario_1/?flush=0
+
 Later you could see the results on the following url::
 
     http://127.0.0.1:8000/demoapp/
