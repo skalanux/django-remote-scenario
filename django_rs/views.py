@@ -47,7 +47,7 @@ def index(request, app, scenario):
             call_command('flush', interactive = False)
             # Loads all initial data fixtures
             call_command('syncdb', interactive = False)
-            call_command('loaddata', settings.INITIAL_E2E_DATA, interactive = False)
+            call_command('loaddata', *settings.INITIAL_E2E_DATA, interactive = False)
 
         imported_scenario.main(request)
         # Error
