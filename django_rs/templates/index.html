@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Django Remote Scenario</title>
+    <link rel="stylesheet" href="{{STATIC_URL}}styles.css">
+    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="{{STATIC_URL}}script.js"></script>
+  </head>
+  <body>
+<h1> Django Remote Scenario </h1>
+<h2> Available Scenarios: </h2>
+{% for app, scenarios in apps.items %}
+  <h3>{{ app }}</h3>
+    <ul>
+    {% for scenario in scenarios %}
+      <li> <a href="{{app}}/{{scenario}}">{{ scenario }} </a></li>
+    {% endfor %}
+    </ul>
+{% endfor %}
+  </body>
+</html>

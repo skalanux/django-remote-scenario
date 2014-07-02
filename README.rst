@@ -90,6 +90,9 @@ Later you could see the results on the following url::
 
     http://127.0.0.1:8000/demoapp/
 
+Experimental scenario listing has been added, and could be checked out by visting the root url for drs::
+
+    http://127.0.0.1:8000/drs/
 
 
 

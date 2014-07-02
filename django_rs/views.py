@@ -19,10 +19,13 @@
 #   This is free software, and you are welcome to redistribute it
 #   under certain conditions;
 import importlib
+import glob
+import os
 
 from django.conf import settings
 from django.core.management import call_command
 from django.http import HttpResponse
+from django.shortcuts import render
 
 try:
     E2E_MODE = settings.E2E_MODE
@@ -30,7 +33,27 @@ except:
     E2E_MODE = False
 
 
-def index(request, app, scenario):
+def index(request):
+    #Fixme: This entire view needs to be refactorized with proper testing
+    # this is just a (Working) proof of concept
+
+    apps = {}
+    if E2E_MODE:
+        for app in settings.INSTALLED_APPS:
+            try:
+                scenario_module = importlib.import_module(app+".scenarios")
+            except ImportError:
+                pass
+            else:
+                files = glob.glob(os.path.join(scenario_module.__path__[0], "*.py"))
+                scenarios = [k.split("/")[-1].split(".py")[0] for k in files if k[-11:]!="__init__.py"]
+                apps[app] = scenarios
+
+        data = {'apps': apps}
+    return render(request, "index.html", data)
+
+
+def scenario(request, app, scenario):
     if E2E_MODE:
         app = app if app in settings.INSTALLED_APPS else None
         if app is None:
@@ -44,9 +67,9 @@ def index(request, app, scenario):
 
         if flush:
             # Initializes database
-            call_command('flush', interactive = False)
+            call_command('flush', interactive=False)
             # Loads all initial data fixtures
-            call_command('syncdb', interactive = False)
+            call_command('syncdb', interactive=False)
             call_command('loaddata', *settings.INITIAL_E2E_DATA, interactive = False)
 
         imported_scenario.main(request)
