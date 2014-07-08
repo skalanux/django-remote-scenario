@@ -18,6 +18,8 @@
 #   django-remote-scenario comes with ABSOLUTELY NO WARRANTY.
 #   This is free software, and you are welcome to redistribute it
 #   under certain conditions;
+from optparse import make_option
+
 from django.conf import settings
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
@@ -25,9 +27,13 @@ from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
     help = "Run e2e testserver."
+    option_list = BaseCommand.option_list + (
+        make_option('--addrport',type='str', dest='port',
+            help='port number or ipaddr:port'),)
 
     def handle(self, *args, **options):
         settings.E2E_MODE = True
         settings.INITIAL_E2E_DATA = args
-        call_command('testserver', *args, interactive=False)
-
+        port = (options.get('port', "127.0.0.1:8000"))
+        options['addrport'] = port
+        call_command('testserver', *args,interactive=False,**options)
