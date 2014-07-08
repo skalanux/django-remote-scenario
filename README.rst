@@ -58,7 +58,7 @@ Note: You need to pass a initial fixture file with the barebones of your data.
 it is also possible to pass a specific settings file, for testing purposes,
 in case you want to do the tests using a different database for example::
 
-    python manage.py rune2eserver initial_data.json --settings=demoproject.test_settings
+    python manage.py rune2eserver initial_data.json --settings=demoproject.test_settings [fixture1 fixture2....] [--addrport ipaddress:port]
 
 
 To start using it, just go to the following url::
