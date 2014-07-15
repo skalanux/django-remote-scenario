@@ -31,7 +31,7 @@ Then add it to an exsiting django project::
     ...
     django_rs
 
-You need add django_rs urls to your project url file like this::
+You need to add django_rs urls to your project url file like this::
 
     urlpatterns = patterns('',
     ...
@@ -90,7 +90,7 @@ Later you could see the results on the following url::
 
     http://127.0.0.1:8000/demoapp/
 
-Experimental scenario listing has been added, and could be checked out by visting the root url for drs::
+Experimental scenario listing has been added, and could be checked out by visting the root url for drs (on this case /drs/) ::
 
     http://127.0.0.1:8000/drs/
 
