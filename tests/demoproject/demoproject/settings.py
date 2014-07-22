@@ -38,7 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django_extensions',
     'django_rs',
-    'demoapp'
+    'demoapp',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -83,3 +83,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+DEFAULT_FAKE_USER_ID = 1
+MIDDLEWARE_CLASSES = list(MIDDLEWARE_CLASSES)
+AUTHENTICATION_BACKENDS = ('django_rs.backends.FakeBackendAuth',)
+MIDDLEWARE_CLASSES.append('django_rs.backends.FakeMiddlewareAuth')
