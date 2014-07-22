@@ -95,8 +95,18 @@ Experimental scenario listing has been added, and could be checked out by vistin
     http://127.0.0.1:8000/drs/
 
 
+Fake login:
+-----------
 
+If you want to avoid having to login, each time you try a new scenario, an experimental fake login has been added, you just have to add the following
+inside your custom test_settings file ::
 
+    DEFAULT_FAKE_USER_ID = 1
+    MIDDLEWARE_CLASSES = list(MIDDLEWARE_CLASSES)
+    AUTHENTICATION_BACKENDS = ('django_rs.backends.FakeBackendAuth',)
+    MIDDLEWARE_CLASSES.append('django_rs.backends.FakeMiddlewareAuth')
+
+Note that the FAKE_USER_ID has to be an existent one, (you may provide this on a fixture)
 
 Features
 --------
