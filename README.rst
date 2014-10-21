@@ -25,7 +25,7 @@ Install django-remote-scenario::
 
     pip install django-remote-scenario
 
-Then add it to an exsiting django project::
+Then add it to an existing django project::
 
     INSTALLED_APPS = [
     ...
@@ -40,7 +40,7 @@ You need to add django_rs urls to your project url file like this::
     )
 
 To create custom scenarios, just create a directory inside your app named "scenarios"
-, then add as many files as scenarios you want to implement and create a __init__.py
+, then add as many files as scenarioes you want to implement and create a __init__.py
 file to import them. Inside each of those files, you need to implement a main() function
 setting up the models you want to create for the scenario, you could create them by hand
 or use something like django_dynamic_fixtures https://github.com/paulocheque/django-dynamic-fixture
