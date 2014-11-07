@@ -18,22 +18,47 @@
 #   django-remote-scenario comes with ABSOLUTELY NO WARRANTY.
 #   This is free software, and you are welcome to redistribute it
 #   under certain conditions;
+
+# This file is loosely based on the testserver django's bundled command
+
 from optparse import make_option
 
 from django.conf import settings
-from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
     help = "Run e2e testserver."
     option_list = BaseCommand.option_list + (
-        make_option('--addrport',type='str', dest='port',
-            help='port number or ipaddr:port'),)
+        make_option('--addrport',type='str', dest='addrport',
+            help='port number or ipaddr:port'),
+        make_option('--skip-test-db', '-t', action='store_true', dest='skip_test_db', default=False,
+            help='Tells Django to create an ephemeral db.'))
 
-    def handle(self, *args, **options):
+    def handle(self, *fixture_labels, **options):
+        from django.core.management import call_command
+        from django.db import connection
+
         settings.E2E_MODE = True
-        settings.INITIAL_E2E_DATA = args
-        port = (options.get('port', "127.0.0.1:8000"))
-        options['addrport'] = port
-        call_command('testserver', *args,interactive=False,**options)
+        settings.INITIAL_E2E_DATA = fixture_labels
+
+        verbosity = int(options.get('verbosity'))
+        interactive = options.get('interactive')
+        addrport = (options.get('addrport', "127.0.0.1:8000"))
+        skip_test_db = (options.get('skip_test_db'))
+
+        interactive = False
+        # Create a test database by default
+        if not skip_test_db:
+            connection.creation.create_test_db(verbosity=verbosity, autoclobber=not interactive, serialize=False)
+
+        # Import the fixture data into the database.
+        call_command('loaddata', *fixture_labels, **{'verbosity': verbosity})
+
+        use_threading = connection.features.test_db_allows_multiple_connections
+        call_command(
+            'runserver',
+            addrport=addrport,
+            use_reloader=False,
+            use_threading=use_threading
+        )

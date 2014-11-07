@@ -14,7 +14,7 @@
   <h3>{{ app }}</h3>
     <ul>
     {% for scenario in scenarios %}
-      <li> <a href="{{app}}/{{scenario}}">{{ scenario }} </a></li>
+      <li>{{ scenario }}:<a href="{{app}}/{{scenario}}?flush=0">Load scenario</a> | <a href="{{app}}/{{scenario}}">Flush db and Load scenario</a></li>
     {% endfor %}
     </ul>
 {% endfor %}
