@@ -23,6 +23,7 @@
 
 from optparse import make_option
 
+import django
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
@@ -50,7 +51,15 @@ class Command(BaseCommand):
         interactive = False
         # Create a test database by default
         if not skip_test_db:
-            connection.creation.create_test_db(verbosity=verbosity, autoclobber=not interactive, serialize=False)
+            params = {'verbosity':verbosity,
+                      'autoclobber':not interactive}
+
+            if django.VERSION[1] >= 7:
+                params['serializer'] = False
+
+
+
+            connection.creation.create_test_db(**params)
 
         # Import the fixture data into the database.
         call_command('loaddata', *fixture_labels, **{'verbosity': verbosity})

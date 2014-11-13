@@ -36,7 +36,7 @@ except:
 def index(request):
     #Fixme: This entire view needs to be refactorized with proper testing
     # this is just a (Working) proof of concept
-
+    data = {}
     apps = {}
     if E2E_MODE:
         for app in settings.INSTALLED_APPS:
