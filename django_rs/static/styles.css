@@ -1,5 +1,20 @@
 body {
-background: #eee;
-font-size: 12px;
-font-family: Sans-serif;
+  background: #eee;
+  font-size: 12px;
+  font-family: Sans-serif;
+
+}
+.custom-table>thead> tr{
+  color: #fff;
+  background-color: #5cb85c;
+}
+.custom-table>thead th.scenario{
+  width:30%;
+}
+.custom-table>thead th.actions{
+  width:70%;
+}
+
+.custom-table>tbody>tr>td{
+  vertical-align:middle !important;
 }

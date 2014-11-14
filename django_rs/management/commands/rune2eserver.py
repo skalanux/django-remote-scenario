@@ -23,6 +23,9 @@
 
 from optparse import make_option
 
+import time
+import threading
+
 import django
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -32,9 +35,9 @@ class Command(BaseCommand):
     help = "Run e2e testserver."
     option_list = BaseCommand.option_list + (
         make_option('--addrport',type='str', dest='addrport',
-            help='port number or ipaddr:port'),
+                    help='port number or ipaddr:port'),
         make_option('--skip-test-db', '-t', action='store_true', dest='skip_test_db', default=False,
-            help='Tells Django to create an ephemeral db.'))
+                    help='Tells Django to create an ephemeral db.'))
 
     def handle(self, *fixture_labels, **options):
         from django.core.management import call_command
@@ -49,25 +52,34 @@ class Command(BaseCommand):
         skip_test_db = (options.get('skip_test_db'))
 
         interactive = False
-        # Create a test database by default
-        if not skip_test_db:
-            params = {'verbosity':verbosity,
-                      'autoclobber':not interactive}
+        def thread_call_command():
+            # Create a test database by default
+            if not skip_test_db:
+                params = {'verbosity': verbosity,
+                          'autoclobber': not interactive}
 
-            if django.VERSION[1] >= 7:
-                params['serializer'] = False
+                if django.VERSION[1] >= 7:
+                    params['serializer'] = False
 
+                connection.creation.create_test_db(**params)
 
+            # Import fixture data into the database.
+            use_threading = connection.features.test_db_allows_multiple_connections
+            call_command('loaddata', *fixture_labels, **{'verbosity': verbosity})
 
-            connection.creation.create_test_db(**params)
+            call_command(
+                'runserver',
+                addrport=addrport,
+                use_reloader=False,
+                use_threading=use_threading
+                )
 
-        # Import the fixture data into the database.
-        call_command('loaddata', *fixture_labels, **{'verbosity': verbosity})
+        running = False
+        while True:
+            if not running:
+                t = threading.Thread(target=thread_call_command)
+                t.start()
+                running = True
 
-        use_threading = connection.features.test_db_allows_multiple_connections
-        call_command(
-            'runserver',
-            addrport=addrport,
-            use_reloader=False,
-            use_threading=use_threading
-        )
+            print "sleeping"
+            time.sleep(1)
