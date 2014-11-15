@@ -3,13 +3,15 @@
   <head>
     <meta charset="utf-8">
     <title>Django Remote Scenario</title>
-    <link rel="stylesheet" href="{{STATIC_URL}}styles.css">
+
+    <!--Styles-->
+    <link rel="stylesheet" href="{{STATIC_URL}}css/styles.css">
+    <link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.min.css">
+
+    <!--JavaScript-->
     <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="{{STATIC_URL}}script.js"></script>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="{{STATIC_URL}}js/script.js"></script>
+    <script src="{{STATIC_URL}}js/bootstrap.min.js"></script>
 
   </head>
   <body>
@@ -24,7 +26,7 @@
         <h2 class=""> Available Scenarios: </h2>
         {% for app, scenarios in apps.items %}
         <h3 class="text-capitalize">{{ app }}</h3>
-        <table class="table-stripped table custom-table table-bordered">
+        <table  class="table custom-table table-bordered">
           <thead>
             <th class="scenario">Scenario</th> 
             <th class="actions">Actions</th>
@@ -40,7 +42,10 @@
               </button>
               <button  class="btn btn-primary load-scenario load-scenario-flush" type="button" data-scenario={{scenario}} data-app="{{app}}">
                 <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-                Flush db and Load 
+                Flush & Load 
+              </button>
+              <button class="load-result btn btn-primary" type="button">
+                <span class="glyphicon" aria-hidden="true"></span>
               </button>
             </td>
           </tr>
