@@ -21,18 +21,20 @@
         <h1 class="page-header text-center"> Django Remote Scenario </h1>
       </div>
     </div>
+
+    {% for app in apps %}
     <div class="row">
       <div class="col-md-10 col-md-offset-1">
-        <h2 class=""> Available Scenarios: </h2>
-        {% for app, scenarios in apps.items %}
-        <h3 class="text-capitalize">{{ app }}</h3>
-        <table  class="table custom-table table-bordered">
+        <h2 class="text-capitalize">{{ app.name }}</h3>
+        <h3 class=""> Available Scenarios: </h2>
+        {% if app.scenarios %}
+        <table class="table custom-table table-bordered">
           <thead>
             <th class="scenario">Scenario</th> 
             <th class="actions">Actions</th>
           </thead>
           <tbody>
-          {% for scenario in scenarios %}
+          {% for scenario in app.scenarios %}
           <tr>
             <td>{{ scenario }}</td> 
             <td>
@@ -51,9 +53,38 @@
           </tr>
           {% endfor %}
           </tbody>
-          {% endfor %}
+        {% endif %}
         </table>
+
+        <h3 class=""> Available Mocks: </h2>
+        {% if app.mocks %}
+        <table class="table-stripped table custom-table table-bordered">
+          <thead>
+            <th class="scenario">Mock</th> 
+            <th class="actions">Actions</th>
+          </thead>
+          <tbody>
+          {% for mock in mocks %}
+          <tr>
+            <td>{{ mock }}</td> 
+            <td>
+              <button class="activate-mock btn btn-primary" type="button" data-mock={{mock}} data-app="{{app}}">
+                <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                Activate
+              </button>
+              <button class="deactivate-mock btn btn-primary" type="button" data-mock={{mock}} data-app="{{app}}">
+                <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                Deactivate
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        {% endif %}
       </div>
     </div>
+    {% endfor %}
+
     </body>
     </html>

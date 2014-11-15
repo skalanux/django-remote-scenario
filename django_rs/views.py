@@ -32,25 +32,35 @@ try:
 except:
     E2E_MODE = False
 
+def _discover_files(path):
+    files = glob.glob(os.path.join(path, "*.py"))
+    return [k.split("/")[-1].split(".py")[0] for k in files if k[-11:]!="__init__.py"]
+
 
 def index(request):
     #Fixme: This entire view needs to be refactorized with proper testing
     # this is just a (Working) proof of concept
-    data = {}
-    apps = {}
+    
+    apps = []
     if E2E_MODE:
         for app in settings.INSTALLED_APPS:
+            scenarios = []
+            mocks = []
             try:
                 scenario_module = importlib.import_module(app+".scenarios")
+                mocks_module = None
+                if hasattr(scenario_module, "mocks"):
+                    mocks_module = importlib.import_module(app+".scenarios.mocks")
             except ImportError:
                 pass
             else:
-                files = glob.glob(os.path.join(scenario_module.__path__[0], "*.py"))
-                scenarios = [k.split("/")[-1].split(".py")[0] for k in files if k[-11:]!="__init__.py"]
-                apps[app] = scenarios
+                scenarios.append(_discover_files(scenario_module.__path__[0]))
+                if mocks_module:
+                    mocks.append(_discover_files(mocks_module.__path__[0]))
 
-        data = {'apps': apps}
-    return render(request, "index.html", data)
+            if scenarios or mocks:
+                apps.append({'name': app, 'scenarios': scenarios, 'mocks': mocks})
+    return render(request, "index.html", {'apps': apps})
 
 
 def scenario(request, app, scenario):
