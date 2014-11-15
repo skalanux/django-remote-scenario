@@ -38,11 +38,11 @@
           <tr>
             <td>{{ scenario }}</td> 
             <td>
-              <button class="load-scenario btn btn-primary" type="button" data-scenario={{scenario}} data-app="{{app}}">
+              <button class="load-scenario btn btn-primary" type="button" data-scenario={{scenario}} data-app="{{app.name}}">
                 <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                 Load
               </button>
-              <button  class="btn btn-primary load-scenario load-scenario-flush" type="button" data-scenario={{scenario}} data-app="{{app}}">
+              <button  class="btn btn-primary load-scenario load-scenario-flush" type="button" data-scenario={{scenario}} data-app="{{app.name}}">
                 <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                 Flush & Load 
               </button>
@@ -68,11 +68,11 @@
           <tr>
             <td>{{ mock }}</td> 
             <td>
-              <button class="activate-mock btn btn-primary" type="button" data-mock={{mock}} data-app="{{app}}">
+              <button class="activate-mock btn btn-primary" type="button" data-mock={{mock}} data-app="{{app.name}}">
                 <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                 Activate
               </button>
-              <button class="deactivate-mock btn btn-primary" type="button" data-mock={{mock}} data-app="{{app}}">
+              <button class="deactivate-mock btn btn-primary" type="button" data-mock={{mock}} data-app="{{app.name}}">
                 <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                 Deactivate
               </button>
