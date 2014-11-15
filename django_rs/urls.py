@@ -25,5 +25,7 @@ from django_rs import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^(?P<app>[-\w.]+)/(?P<scenario>\w+)/', views.scenario, name='scenario')
+    url(r'^(?P<app>[-\w.]+)/scenarios/(?P<scenario>\w+)/', views.scenario, name='scenario'),
+    url(r'^(?P<app>[-\w.]+)/mocks/(?P<mock>\w+)/', views.mock, name='mock'),
+    url(r'reset-mocks', views.reset, name='reset-mock')
 ]

@@ -25,5 +25,6 @@ from demoapp import views
 
 
 urlpatterns = [
-    url(r'^', views.index, name='index')
+    url(r'^y2k', views.y2k, name='y2k'),
+    url(r'^?', views.index, name='index'),
 ]

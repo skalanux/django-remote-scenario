@@ -40,7 +40,7 @@ def _discover_files(path):
 def index(request):
     #Fixme: This entire view needs to be refactorized with proper testing
     # this is just a (Working) proof of concept
-    
+
     apps = []
     if E2E_MODE:
         for app in settings.INSTALLED_APPS:
@@ -86,6 +86,45 @@ def scenario(request, app, scenario):
         # Error
         # return HttpResponse(status=500)
         # OK
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=403)
+
+def _force_reload():
+    """Force django server reloading."""
+    # TODO: Touch file
+    filename =  "/home/ska/Dropbox/Projects/Devecoop/django-remote-scenario/django_rs/management/commands/rune2eserver.py"
+    os.utime(filename, None)
+
+def reset(request):
+    import shelve
+    di = shelve.open('/tmp/drs_store')
+    di.clear()
+    di.close()
+    _force_reload()
+    return HttpResponse(status=200)
+
+def mock(request, app, mock):
+    if E2E_MODE:
+        app = app if app in settings.INSTALLED_APPS else None
+        if app is None:
+            raise ValueError
+
+        mock_module_string = str(app+".scenarios.mocks."+mock)
+
+        activate = request.GET.get('activate', '1')
+
+        activate = True if activate=='1' else False
+
+        import shelve
+        di = shelve.open('/tmp/drs_store')
+        if activate:
+           # TODO: Make an ordered list
+            di[mock_module_string] = True
+        else:
+            del di[mock_module_string]
+        di.close()
+        _force_reload()
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=403)

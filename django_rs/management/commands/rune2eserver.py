@@ -21,42 +21,12 @@
 
 # This file is loosely based on the testserver django's bundled command
 
-from optparse import make_option
-
 import sys
-import threading
-import time
+from optparse import make_option
 
 import django
 from django.conf import settings
 from django.core.management.base import BaseCommand
-
-
-class SigFinish(Exception):
-    pass
-
-def throw_signal_function(frame, event, arg):
-    raise SigFinish()
-
-def do_nothing_trace_function(frame, event, arg):
-    # Note: each function called will actually call this function
-    # so, take care, your program will run slower because of that.
-    return None
-
-def interrupt_thread(thread):
-    for thread_id, frame in sys._current_frames().items():
-        if thread_id == thread.ident:  # Note: Python 2.6 onwards
-            set_trace_for_frame_and_parents(frame, throw_signal_function)
-
-def set_trace_for_frame_and_parents(frame, trace_func):
-    # Note: this only really works if there's a tracing function set in this
-    # thread (i.e.: sys.settrace or threading.settrace must have set the
-    # function before)
-    while frame:
-        if frame.f_trace is None:
-            frame.f_trace = trace_func
-        frame = frame.f_back
-    del frame
 
 
 class Command(BaseCommand):
@@ -65,7 +35,7 @@ class Command(BaseCommand):
         make_option('--addrport',type='str', dest='addrport',
                     help='port number or ipaddr:port'),
         make_option('--skip-test-db', '-t', action='store_true', dest='skip_test_db', default=False,
-                    help='Tells Django to create an ephemeral db.'))
+                  help='Tells Django to create an ephemeral db.'))
 
     def handle(self, *fixture_labels, **options):
         from django.core.management import call_command
@@ -81,21 +51,45 @@ class Command(BaseCommand):
 
         interactive = False
 
-        def thread_call_command():
-            # Create a test database by default
-            settings.SKIP_TEST_DB = skip_test_db
-            # Import fixture data into the database.
-            use_threading = connection.features.test_db_allows_multiple_connections
-            print "use threading %s" % use_threading
+        settings.SKIP_TEST_DB = skip_test_db
+        use_threading = connection.features.test_db_allows_multiple_connections
+
+        def load_data():
             call_command('loaddata', *fixture_labels, **{'verbosity': verbosity})
 
-            call_command(
-                'runserver',
-                addrport=addrport,
-                use_reloader=True,
-                use_threading=use_threading
-                )
+        def initialize_test_db():
+            params = {'verbosity': True,
+                          'autoclobber': False}
+            connection.creation.create_test_db(**params)
+            load_data()
 
-        running = False
-        settings.RELOAD_E2E_SERVER = False
-        thread_call_command()
+        def initializer():
+            if not settings.SKIP_TEST_DB:
+                initialize_test_db()
+
+            import importlib
+            import shelve
+            di = shelve.open('/tmp/drs_store')
+            for mock_module_string, value in di.iteritems():
+
+                imported_mock = importlib.import_module(mock_module_string)
+
+                setattr(imported_mock.to_mock,
+                        imported_mock.to_mock_attr,
+                        imported_mock.mock
+                        )
+            di.close()
+
+        settings.MOCKED_MODULES = set()
+
+        if settings.SKIP_TEST_DB:
+            load_data()
+
+        settings.E2E_RELOAD_INITIALIZER = initializer
+
+        call_command(
+            'runserver',
+            addrport=addrport,
+            use_reloader=True,
+            use_threading=use_threading
+            )
