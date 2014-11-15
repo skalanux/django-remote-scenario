@@ -54,9 +54,9 @@ def index(request):
             except ImportError:
                 pass
             else:
-                scenarios.append(_discover_files(scenario_module.__path__[0]))
+                scenarios = _discover_files(scenario_module.__path__[0])
                 if mocks_module:
-                    mocks.append(_discover_files(mocks_module.__path__[0]))
+                    mocks = _discover_files(mocks_module.__path__[0])
 
             if scenarios or mocks:
                 apps.append({'name': app, 'scenarios': scenarios, 'mocks': mocks})
