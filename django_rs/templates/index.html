@@ -64,18 +64,18 @@
             <th class="actions">Actions</th>
           </thead>
           <tbody>
-          {% for mock in mocks %}
+          {% for mock in app.mocks %}
           <tr>
             <td>{{ mock }}</td> 
             <td>
-              <button class="activate-mock btn btn-primary" type="button" data-mock={{mock}} data-app="{{app.name}}">
+              <a href="/{{app.name}}/mocks/{{mock}}" class="activate-mock btn btn-primary">
                 <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                 Activate
-              </button>
-              <button class="deactivate-mock btn btn-primary" type="button" data-mock={{mock}} data-app="{{app.name}}">
-                <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+              </a>
+              <a href="/{{app.name}}/mocks/{{mock}}?activate=0" class="activate-mock btn btn-danger">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 Deactivate
-              </button>
+              </a>
             </td>
           </tr>
           {% endfor %}
