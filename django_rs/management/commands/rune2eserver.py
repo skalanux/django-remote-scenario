@@ -23,12 +23,40 @@
 
 from optparse import make_option
 
-import time
+import sys
 import threading
+import time
 
 import django
 from django.conf import settings
 from django.core.management.base import BaseCommand
+
+
+class SigFinish(Exception):
+    pass
+
+def throw_signal_function(frame, event, arg):
+    raise SigFinish()
+
+def do_nothing_trace_function(frame, event, arg):
+    # Note: each function called will actually call this function
+    # so, take care, your program will run slower because of that.
+    return None
+
+def interrupt_thread(thread):
+    for thread_id, frame in sys._current_frames().items():
+        if thread_id == thread.ident:  # Note: Python 2.6 onwards
+            set_trace_for_frame_and_parents(frame, throw_signal_function)
+
+def set_trace_for_frame_and_parents(frame, trace_func):
+    # Note: this only really works if there's a tracing function set in this
+    # thread (i.e.: sys.settrace or threading.settrace must have set the
+    # function before)
+    while frame:
+        if frame.f_trace is None:
+            frame.f_trace = trace_func
+        frame = frame.f_back
+    del frame
 
 
 class Command(BaseCommand):
@@ -52,34 +80,22 @@ class Command(BaseCommand):
         skip_test_db = (options.get('skip_test_db'))
 
         interactive = False
+
         def thread_call_command():
             # Create a test database by default
-            if not skip_test_db:
-                params = {'verbosity': verbosity,
-                          'autoclobber': not interactive}
-
-                if django.VERSION[1] >= 7:
-                    params['serializer'] = False
-
-                connection.creation.create_test_db(**params)
-
+            settings.SKIP_TEST_DB = skip_test_db
             # Import fixture data into the database.
             use_threading = connection.features.test_db_allows_multiple_connections
+            print "use threading %s" % use_threading
             call_command('loaddata', *fixture_labels, **{'verbosity': verbosity})
 
             call_command(
                 'runserver',
                 addrport=addrport,
-                use_reloader=False,
+                use_reloader=True,
                 use_threading=use_threading
                 )
 
         running = False
-        while True:
-            if not running:
-                t = threading.Thread(target=thread_call_command)
-                t.start()
-                running = True
-
-            print "sleeping"
-            time.sleep(1)
+        settings.RELOAD_E2E_SERVER = False
+        thread_call_command()
