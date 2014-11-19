@@ -11,7 +11,7 @@ $(".load-scenario").click(function(){
   if($(this).hasClass("load-scenario-flush")){
     var flush = "";
   }
-  var endpoint = app+"/"+scenario+flush;
+  var endpoint = app+"/scenarios/"+scenario+flush;
 
   var request = $.ajax({
     url: endpoint,

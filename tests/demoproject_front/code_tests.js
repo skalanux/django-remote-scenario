@@ -1,13 +1,13 @@
 var expect = chai.expect;
 
 describe('Questions', function() {
-    
+
     describe('Questions with no data', function() {
 
         before(function(runTests){
             $.get('http://localhost:8000/drs/demoapp/empty_scenario').done(runTests);
         });
-        
+
         it('should get empty questions list', function(done) {
             (new Questions()).fetch().done(function (data) {
                 expect(data).to.be.empty();

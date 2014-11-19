@@ -88,7 +88,7 @@ class Command(BaseCommand):
         settings.E2E_RELOAD_INITIALIZER = initializer
 
         call_command(
-            'runserver',
+            'runserver_patched',
             addrport=addrport,
             use_reloader=True,
             use_threading=use_threading

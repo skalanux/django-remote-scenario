@@ -19,12 +19,24 @@
 #   This is free software, and you are welcome to redistribute it
 #   under certain conditions;
 
-from django.conf.urls import url
+# This file is loosely based on the testserver django's bundled command
 
-from demoapp import views
+import sys
+from optparse import make_option
+
+import django
+from django.conf import settings
+from django.core.management.commands.runserver import Command as RunServerCommand
 
 
-urlpatterns = [
-    url(r'^y2k', views.y2k, name='y2k'),
-    url(r'^index', views.index, name='index'),
-]
+class Command(RunServerCommand):
+    help = "Run patched runserver."
+
+    def inner_run(self, *args, **options):
+        from django.conf import settings
+        from django.utils import translation
+
+        # Necessary hack to make reloading work with a test database
+        settings.E2E_RELOAD_INITIALIZER()
+
+        super(Command, self).inner_run(*args, **options)
