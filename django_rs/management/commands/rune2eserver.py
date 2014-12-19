@@ -21,10 +21,8 @@
 
 # This file is loosely based on the testserver django's bundled command
 
-import sys
 from optparse import make_option
 
-import django
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
@@ -48,8 +46,6 @@ class Command(BaseCommand):
         interactive = options.get('interactive')
         addrport = (options.get('addrport', "127.0.0.1:8000"))
         skip_test_db = (options.get('skip_test_db'))
-
-        interactive = False
 
         settings.SKIP_TEST_DB = skip_test_db
         use_threading = connection.features.test_db_allows_multiple_connections

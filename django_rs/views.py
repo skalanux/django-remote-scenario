@@ -48,10 +48,14 @@ def index(request):
             scenarios = []
             mocks = []
             try:
+
                 scenario_module = importlib.import_module(app+".scenarios")
                 mocks_module = None
                 #if hasattr(scenario_module, "mocks"):
-                mocks_module = importlib.import_module(app+".scenarios.mocks")
+                try:
+                    mocks_module = importlib.import_module(app+".scenarios.mocks")
+                except ImportError:
+                    pass
             except ImportError:
                 pass
             else:
