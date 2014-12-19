@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+SETTINGS_FILE_PATH = __file__
 
 
 # Quick-start development settings - unsuitable for production
@@ -36,14 +37,13 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_extensions',
+    #'django_extensions',
     'django_rs',
     'corsheaders',
     'demoapp'
 )
 
 MIDDLEWARE_CLASSES = (
-    #'django_rs.middleware.MockerMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -87,7 +87,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
-
-
+STATIC_ROOT = '/tmp/static'
 # allow requests from any origin
 CORS_ORIGIN_ALLOW_ALL = True

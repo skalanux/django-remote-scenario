@@ -21,6 +21,7 @@
 import importlib
 import glob
 import os
+import shelve
 
 from django.conf import settings
 from django.core.management import call_command
@@ -49,8 +50,8 @@ def index(request):
             try:
                 scenario_module = importlib.import_module(app+".scenarios")
                 mocks_module = None
-                if hasattr(scenario_module, "mocks"):
-                    mocks_module = importlib.import_module(app+".scenarios.mocks")
+                #if hasattr(scenario_module, "mocks"):
+                mocks_module = importlib.import_module(app+".scenarios.mocks")
             except ImportError:
                 pass
             else:
@@ -90,19 +91,21 @@ def scenario(request, app, scenario):
     else:
         return HttpResponse(status=403)
 
+
 def _force_reload():
     """Force django server reloading."""
-    # TODO: Touch file
-    filename =  "/home/ska/Dropbox/Projects/Devecoop/django-remote-scenario/django_rs/management/commands/rune2eserver.py"
+    # Fixme: Worst hack ever
+    filename = os.path.join(settings.SETTINGS_FILE_PATH)
     os.utime(filename, None)
 
+
 def reset(request):
-    import shelve
     di = shelve.open('/tmp/drs_store')
     di.clear()
     di.close()
     _force_reload()
     return HttpResponse(status=200)
+
 
 def mock(request, app, mock):
     if E2E_MODE:

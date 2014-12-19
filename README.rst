@@ -31,6 +31,11 @@ Then add it to an existing django project::
     ...
     django_rs
 
+Inside your settings file you also need to add the following::
+
+    SETTINGS_FILE_PATH = __file__
+
+
 You need to add django_rs urls to your project url file like this::
 
     urlpatterns = patterns('',
