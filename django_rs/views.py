@@ -123,8 +123,8 @@ def mock(request, app, mock):
 
         activate = True if activate=='1' else False
 
-        import shelve
         di = shelve.open('/tmp/drs_store')
+
         if activate:
            # TODO: Make an ordered list
             di[mock_module_string] = True

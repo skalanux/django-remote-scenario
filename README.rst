@@ -45,12 +45,11 @@ You need to add django_rs urls to your project url file like this::
     )
 
 To create custom scenarios, just create a directory inside your app named "scenarios"
-, then add as many files as scenarioes you want to implement and create a __init__.py
-file to import them. Inside each of those files, you need to implement a main() function
+, then add as many files as scenarios you want to implement and create a __init__.py so it becomes a module
+. Inside each of those files, you need to implement a main() function
 setting up the models you want to create for the scenario, you could create them by hand
 or use something like django_dynamic_fixtures https://github.com/paulocheque/django-dynamic-fixture
 
-Note: Your scenario is not limited to creating new models, you may also mock specific parts of the enviroment as well
 
 
 Once everything is ready, start the server this way, this will enable the dynamic call of scenarios::
@@ -100,12 +99,33 @@ Later you could see the results on the following url::
 
     http://127.0.0.1:8000/demoapp/
 
-Experimental scenario listing has been added, and could be checked out by visting the root url for drs (on this case /drs/) ::
+
+Mocking
+-------
+
+It is possible to mock parts of your backend between scenarios calls. You need to add a new directory inside
+the scenarios directory and name ir 'mocks', then, again, add as many mocks as you want to implement and create a __init__.py so it becomes a module
+. Inside each of those files. You can apply as many mocks as you want and deactivate them selectibly. Pay special atention to the order this mocks are applied, as it may affect their internal behaviour.
+
+To apply a mock just go to the following URL (assumming a file named mock_1 inside demoapp/mocks ::
+
+    http://127.0.0.1:8000/drs/demoapp/mocks/mock_1?activate=1
+
+To remove the mock::
+
+    http://127.0.0.1:8000/drs/demoapp/mocks/mock_1?activate=0
+
+
+An example of a mock can be found inside the test application
+
+
+Browseable interface
+--------------------
+
+
+Experimental scenario and mocking browseable interface could be used to apply mocks and load scenarios by visting the root url for drs (on this case /drs/) ::
 
     http://127.0.0.1:8000/drs/
-
-
-
 
 
 Features
