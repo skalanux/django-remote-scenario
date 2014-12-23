@@ -26,17 +26,17 @@ from optparse import make_option
 
 import django
 from django.conf import settings
-from django.core.management.commands.runserver import Command as RunServerCommand
+
+try:
+    from django.contrib.staticfiles.management.commands.runserver import Command as RunServerCommand
+except:
+    from django.core.management.commands.runserver import Command as RunServerCommand
 
 
 class Command(RunServerCommand):
     help = "Run patched runserver."
 
     def inner_run(self, *args, **options):
-        from django.conf import settings
-        from django.utils import translation
-
         # Necessary hack to make reloading work with a test database
         settings.E2E_RELOAD_INITIALIZER()
-
         super(Command, self).inner_run(*args, **options)
