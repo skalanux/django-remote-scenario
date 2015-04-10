@@ -37,7 +37,7 @@ class Command(BaseCommand):
 
     def handle(self, *fixture_labels, **options):
         from django.core.management import call_command
-        from django.db import connection
+        from django.db import connection, connections
 
         settings.E2E_MODE = True
         settings.INITIAL_E2E_DATA = fixture_labels
@@ -56,7 +56,9 @@ class Command(BaseCommand):
         def initialize_test_db():
             params = {'verbosity': True,
                           'autoclobber': False}
-            connection.creation.create_test_db(**params)
+
+            for connection in connections.all():
+                connection.creation.create_test_db(**params)
             load_data()
 
         def initializer():
