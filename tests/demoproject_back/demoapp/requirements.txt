@@ -75,7 +75,7 @@ pies2overrides==1.0.0
 pip2pi==0.6.2
 piston-mini-client==0.7.2
 py3status==1.0
-pyOpenSSL==0.12
+pyOpenSSL==17.5.0
 pycrypto==2.4.1
 pycups==1.9.61
 pycurl==7.19.0
