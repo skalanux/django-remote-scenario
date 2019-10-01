@@ -34,7 +34,7 @@ dirspec==3.0.0
 elpy==1.4.0
 everpad==2.5dev
 explorer==1.2.2
-feedparser==5.1
+feedparser==5.1.2
 flake8==2.1.0
 flup==1.0.2
 gaphas==0.6.0
