@@ -57,7 +57,7 @@ lxml==2.3.2
 mccabe==0.2.1
 medusa==0.5.4
 meld3==0.6.5
-mercurial==2.8.1
+mercurial==4.1.3
 natsort==3.0.2
 numpy==1.6.1
 nvidia-common==0.0.0
