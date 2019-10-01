@@ -39,7 +39,7 @@ flake8==2.1.0
 flup==1.0.2
 gaphas==0.6.0
 gaphor==0.15.0
-gunicorn==0.17.4
+gunicorn==19.5.0
 html2text==3.200.3
 httplib2==0.7.2
 i3-py==0.6.4
