@@ -91,7 +91,7 @@ python-debian==0.1.21ubuntu1
 python-virtkey==0.60.0
 python-xlib==0.14
 pyudev==0.16.1
-pyxdg==0.19
+pyxdg==0.26
 qbzr==0.22.2
 qtile==0.7.0
 quickswitch-i3==2.1
