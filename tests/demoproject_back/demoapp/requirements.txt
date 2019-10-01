@@ -97,7 +97,7 @@ qtile==0.7.0
 quickswitch-i3==2.1
 regex==0.1.20120613
 reportlab==2.5
-requests==1.2.3
+requests==2.20.0
 rhythmbox-ubuntuone==4.2.0
 rope==0.9.4
 sessioninstaller==0.0.0
