@@ -2,7 +2,7 @@ BeautifulSoup==3.2.0
 Brlapi==0.5.6
 Cheetah==2.4.4
 GnuPGInterface==0.3.2
-Jinja2==2.7.2
+Jinja2==2.11.3
 Magic-file-extensions==0.2
 Mako==0.5.0
 MarkupSafe==0.15
