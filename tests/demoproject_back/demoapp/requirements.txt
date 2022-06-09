@@ -26,7 +26,7 @@ bzr==2.5.1
 chardet==2.0.1
 command-not-found==0.2.44
 configobj==4.7.2
-cookiecutter==0.7.1
+cookiecutter==2.1.1
 debtagshw==0.1
 decorator==3.3.2
 defer==1.0.2
