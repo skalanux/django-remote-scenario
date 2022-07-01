@@ -107,7 +107,7 @@ six==1.5.2
 skeleton==0.6.1
 software-center-aptd-plugins==0.0.0
 stevedore==0.12
-supervisor==3.0a8
+supervisor==3.0.1
 system-service==0.1.6
 tryton==3.0.2
 uTidylib==0.2
